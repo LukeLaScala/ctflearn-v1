@@ -1,0 +1,19 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+
+## [Up Next]
+- Levels and Experience
+- Comments
+
+
+-------    12/16/201   -------
+
+### Added
+- Footer on some pages
+- Added a changelog
+
+### Changed
+- Minor Changes
+
+------- End of Changes -------

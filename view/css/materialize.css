@@ -1659,11 +1659,11 @@
 }
 
 .orange {
-    background-color: #0277bd !important;
+    background-color: #ff9800 !important;
 }
 
 .orange-text {
-    color: #0277bd !important;
+    color: #ff9800 !important;
 }
 
 .orange.lighten-5 {
@@ -2231,7 +2231,7 @@
  *    without disabling user zoom.
  */
 html {
-    font-family: 'Lato', sans-serif;
+    font-family: Hack, monospace ;
     font-weight:200;
     /* 1 */
     -ms-text-size-adjust: 100%;
@@ -3420,7 +3420,7 @@ input[type=range] + .thumb {
 .container {
     margin: 0 auto;
     max-width: 1280px;
-    width: 90%;
+    width: 80%;
 }
 
 
@@ -3433,7 +3433,7 @@ input[type=range] + .thumb {
 
 @media only screen and (min-width: 993px) {
     .container {
-        width: 70%;
+        width: 90%;
     }
 }
 

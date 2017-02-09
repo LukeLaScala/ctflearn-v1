@@ -981,28 +981,6 @@ function add_comment($uid, $pid, $comment){
     $stmt->execute();
 }
 
-function add_news($news){
-    global $dbh;
-    $stmt = $dbh->prepare("INSERT INTO news (news) VALUES (:news)");
-    $stmt->bindParam(':news', $news);
-    $stmt->execute();
-}
-
-function get_recent_news(){
-    global $dbh;
-    $stmt = $dbh->prepare("select * from news order by timestamp desc limit 4");
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-    return $result;
-}
-
-function get_all_news(){
-    global $dbh;
-    $stmt = $dbh->prepare("select * from news order by timestamp desc");
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-    return $result;
-}
 
 function get_comment_owner($cid){
     global $dbh;
@@ -1054,5 +1032,41 @@ function get_recent_users(){
     $stmt->execute();
     $result = $stmt->fetchAll();
     return $result;
+}
 
+function add_post($post, $uid, $iap){
+    global $dbh;
+    $stmt = $dbh->prepare("INSERT INTO posts (post, user_id, is_admin_post) VALUES (:post, :user_id, :is_admin_post)");
+    $stmt->bindParam(':post', $post);
+    $stmt->bindParam(':user_id', $uid);
+    $stmt->bindParam(':is_admin_post', $iap);
+    $stmt->execute();
+}
+
+function get_posts($limit){
+    global $dbh;
+    $stmt = $dbh->prepare("SELECT * FROM posts p inner join users u on p.user_id = u.user_id where p.is_admin_post != true order by timestamp desc limit :limit");
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
+function get_admin_posts($limit){
+    global $dbh;
+    $stmt = $dbh->prepare("SELECT * FROM posts p inner join users u on p.user_id = u.user_id where p.is_admin_post order by timestamp desc limit :limit");
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
+
+function get_post_by_id($post_id){
+    global $dbh;
+    $stmt = $dbh->prepare("select * from posts p inner join users u on u.user_id = p.user_id where post_id = :post_id");
+    $stmt->bindParam(':post_id', $post_id);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
 }

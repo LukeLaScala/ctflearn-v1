@@ -504,11 +504,11 @@ else {
             if (get_user($username)) {
                 $user = get_user($username);
                 $recent_submissions = get_recent_submissions_per_user($user['user_id']);
+
             } else {
                 $_SESSION['lookup_user'] = "Could not find that user!";
                 header("Location: index.php?action=show_account_lookup");
             }
-
 
             include 'account.php';
             break;
@@ -1089,14 +1089,6 @@ else {
             include 'admin.php';
             break;
 
-        case "add_news":
-            include "../models/db_functions.php";
-            if($_SESSION['user']['admin']){
-                add_news($_POST['news']);
-            }
-
-            break;
-
         case "all_news":
             include '../models/db_functions.php';
             include 'all_news.php';
@@ -1119,6 +1111,45 @@ else {
         case "slack":
             include 'slack.php';
             break;
+
+        case "add_post":
+            require_login();
+            include '../models/db_functions.php';
+
+            if(isset($_POST['post']) && strlen($_POST['post']) <= 400){
+                add_post(nl2br(htmlspecialchars($_POST['post'])), $_SESSION['user']['user_id'], false);
+                $_SESSION['alerts'] = 'Successfully posted';
+            }
+
+            header('Location: index.php');
+            break;
+
+        case "add_admin_post":
+            require_login();
+            include '../models/db_functions.php';
+
+            if(!$_SESSION['user']['admin']){
+                header("Location: index.php");
+            }
+            if(isset($_POST['post']) && strlen($_POST['post']) <= 400){
+                add_post(nl2br(htmlspecialchars($_POST['post'])), $_SESSION['user']['user_id'], true);
+                $_SESSION['alerts'] = 'Successfully posted';
+            }
+
+            header('Location: index.php');
+            break;
+
+        case "view_post":
+            include '../models/db_functions.php';
+            if(!isset($_GET['post_id'])){
+                header("Location: index.php");
+            }
+            else {
+                $post = get_post_by_id($_GET['post_id']);
+                include 'view_post.php';
+            }
+            break;
+
 
         default:
             if (isset($_SESSION['user'])) {

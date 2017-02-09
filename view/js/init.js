@@ -6,6 +6,8 @@ $(document).ready(function(){
     $('.tooltipped').tooltip({delay: 50});
     $(".dropdown-button").dropdown();
     $('.modal-trigger').leanModal();
+    $('.modal').modal();
+
 
     var slider = document.getElementById('difficulty');
     noUiSlider.create(slider, {

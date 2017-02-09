@@ -15,14 +15,4 @@
 <script src="js/init.js"></script>
 <script src="js/nouislider.js"></script>
 <link rel="stylesheet" href="css/nouislider.css">
-<link href="https://fonts.googleapis.com/css?family=Lato:300|Roboto:200" rel="stylesheet">
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-86115073-3', 'auto');
-    ga('send', 'pageview');
-</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.020/css/hack-extended.min.css">

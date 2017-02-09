@@ -32,32 +32,37 @@
         <?php echo(get_alerts()); ?>
 
         <div class="contain">
-           <div class="row padding-top-30">
+            <div class="row padding-top-30">
+                <div class="col l7">
+                    <a class="orange-text" href="index.php?action=show_unsolved_problems">Unsolved Problems</a>
+                </div>
+            </div>
+            <div class="row">
                <div class="col l7">
                    <div class="card white">
                        <div class="card-content blue-text" id="main-problem">
-                          <p><span class="card-title more-padding-bottom">Hextraordinary</span><span class="right">By Intelagent</span></p>
-                           <h6 class="blue-text">Forensics</h6>
+                          <p><span class="card-title more-padding-bottom"><?php echo($problems[0]['problem_name']); ?></span><span class="right"><?php echo(get_username_html($problems[0]['username'])); ?></span></p>
+                           <h6 class="blue-text"><?php echo(htmlspecialchars($problems[0]['category'])); ?></h6>
                            <div class="card-action">
-                               <p class="wrap-word padding-top-30">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                               <p class="wrap-word padding-top-30"><?php echo($problems[0]['problem_description']); ?></p>
                            </div>
                        </div>
                        <div class="card-action">
-                           <a href="#">Solve now</a>
+                           <a href="index.php?action=find_problem_details&problem_id=<?php echo($problems[0]['problem_id']); ?>">Solve now</a>
                        </div>
                    </div>
                </div>
                <div class="col l5">
-                   <div class="card white" style="flex-grow: 1;">
+                   <div class="card white">
                        <div class="card-content blue-text" id="main-problem">
-                           <p><span class="card-title more-padding-bottom">Hextraordinary</span><span class="right">By Intelagent</span></p>
-                           <h6 class="blue-text">Forensics</h6>
+                           <p><span class="card-title more-padding-bottom"><?php echo($problems[2]['problem_name']); ?></span><span class="right"><?php echo(get_username_html($problems[1]['username'])); ?></span></p>
+                           <h6 class="blue-text"><?php echo(htmlspecialchars($problems[1]['category'])); ?></h6>
                            <div class="card-action">
-                               <p class="wrap-word padding-top-30">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                               <p class="wrap-word padding-top-30"><?php echo($problems[1]['problem_description']); ?></p>
                            </div>
                        </div>
                        <div class="card-action">
-                           <a href="#">Solve now</a>
+                           <a href="index.php?action=find_problem_details&problem_id=<?php echo($problems[1]['problem_id']); ?>">Solve now</a>
                        </div>
                    </div>
                </div>
@@ -76,7 +81,7 @@
                 </div>
                 <div class="col l6">
                     <h4 class="inline">Posts from others</h4>
-                    <a href="#add-comment" class="right inline modal-trigger">Add a post</a>
+                    <a href="#add-post" class="right inline modal-trigger">Add a post</a>
                 </div>
             </div>
 
@@ -88,7 +93,7 @@
                                 <p class="black-text"><?php echo($post['post']); ?></p>
                             </div>
                             <div class="card-action">
-                                <p><span><?php echo(get_username_html($post['username'])); ?></span><span class="right"><?php echo(time_elapsed_string($post['timestamp'])); ?> – &nbsp<a href="index.php?action=view_post&post_id=<?php echo($post['post_id']); ?>" class="right orange-text inline">32 Comments</a></span></p>
+                                <p><span><?php echo(get_username_html($post['username'])); ?></span><span class="right"><?php echo(time_elapsed_string($post['timestamp'])); ?> – &nbsp<a href="index.php?action=view_post&post_id=<?php echo($post['post_id']); ?>" class="right orange-text inline"><?php echo(get_num_replies($post['post_id'])); ?> Comments</a></span></p>
                             </div>
                         </div>
                     <?php } ?>
@@ -102,7 +107,7 @@
                             <p class="black-text"><?php echo($post['post']); ?></p>
                         </div>
                         <div class="card-action">
-                            <p><span><?php echo(get_username_html($post['username'])); ?></span><span class="right"><?php echo(time_elapsed_string($post['timestamp'])); ?> – &nbsp<a href="index.php?action=view_post&post_id=<?php echo($post['post_id']); ?>" class="right orange-text inline">32 Comments</a></span></p>
+                            <p><span><?php echo(get_username_html($post['username'])); ?></span><span class="right"><?php echo(time_elapsed_string($post['timestamp'])); ?> – &nbsp<a href="index.php?action=view_post&post_id=<?php echo($post['post_id']); ?>" class="right orange-text inline"><?php echo(get_num_replies($post['post_id'])); ?> Comments</a></span></p>
                         </div>
                     </div>
                     <?php } ?>
@@ -111,16 +116,16 @@
 
             <div class="row">
                 <div class="col l6">
-                    <a href="#" class="right inline">Older posts</a>
+                    <a href="index.php?action=view_all_posts&type=ctflearn" class="right orange-text inline">Older posts</a>
                 </div>
                 <div class="col l6">
-                    <a href="#" class="right inline">Older posts</a>
+                    <a href="index.php?action=view_all_posts&type=other" class="right orange-text inline">Older posts</a>
                 </div>
             </div>
         </div>
 
         <!-- Post Modal-->
-        <div id="add-comment" class="modal">
+        <div id="add-post" class="modal">
             <div class="modal-content">
                 <h4>Add a post</h4>
                 <form action="index.php?action=add_post" method="post">

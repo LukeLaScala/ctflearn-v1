@@ -109,7 +109,6 @@ else {
             break;
 
         case "show_add_challenge":
-            require_login();
             include '../models/db_functions.php';
             $groups = get_user_groups($_SESSION['user']['user_id']);
             include 'add_challenge.php';
@@ -152,7 +151,7 @@ else {
                 $_SESSION['add_challenge'] = "Stop hacking the site!";
 
 
-                header('Location: index.php?action=show_add_challenge');
+                header('Location: index.php');
             } else if (problem_name_taken($name)) {
                 $_SESSION['add_challenge'] = "A problem with this name already exists!";
                 header('Location: index.php?action=show_add_challenge');
@@ -167,7 +166,7 @@ else {
                 if ($_SESSION['user']['user_id'] != $user_id) {
                     header("Location: WTF");
                 }
-                add_problem($name, $desc, $user_id, $flag, $difficulty, $category);
+                add_problem(htmlspecialchars($name), nl2br(htmlspecialchars($desc)), $user_id, $flag, $difficulty, htmlspecialchars($category));
                 $_SESSION['add_challenge'] = "Problem added successfully!";
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
             }
@@ -1089,16 +1088,6 @@ else {
             include 'admin.php';
             break;
 
-        case "all_news":
-            include '../models/db_functions.php';
-            include 'all_news.php';
-            break;
-        case "home":
-            require_login();
-            include '../models/db_functions.php';
-            include 'home.php';
-            break;
-
         case "help":
             include "about.php";
             break;
@@ -1132,7 +1121,7 @@ else {
                 header("Location: index.php");
             }
             if(isset($_POST['post']) && strlen($_POST['post']) <= 400){
-                add_post(nl2br(htmlspecialchars($_POST['post'])), $_SESSION['user']['user_id'], true);
+                add_post(nl2br($_POST['post']), $_SESSION['user']['user_id'], true);
                 $_SESSION['alerts'] = 'Successfully posted';
             }
 
@@ -1150,16 +1139,43 @@ else {
             }
             break;
 
+        case "reply":
+            include '../models/db_functions.php';
+            require_login();
+            if(isset($_POST['parent_post_id']) and isset($_POST['reply'])){
+                add_reply_with_parent($_POST['parent_post_id'], $_SESSION['user']['user_id'], htmlspecialchars($_POST['reply']), $_POST['reply_parent']);
+                header('Location: index.php?action=view_post&post_id=' . $_POST['parent_post_id']);
+
+            } else {
+                if(isset($_POST['reply']) and isset($_POST['post_id'])){
+                    add_reply($_POST['post_id'], $_SESSION['user']['user_id'], nl2br(htmlspecialchars($_POST['reply'])));
+                } else{
+                    header("Location: index.php");
+                }
+
+                header('Location: index.php?action=view_post&post_id=' . $_POST['post_id']);
+            }
+            break;
+
+        case "view_all_posts":
+            include '../models/db_functions.php';
+            if(isset($_GET['type'])){
+                if($_GET['type'] == 'other'){
+                    $posts = get_posts(PHP_INT_MAX);
+                }
+                else {
+                    $posts = get_admin_posts(PHP_INT_MAX);
+                }
+
+                include 'allnews.php';
+            }
+
+            break;
 
         default:
-            if (isset($_SESSION['user'])) {
-                include '../models/db_functions.php';
-                include 'home.php';
-            }
-            else {
-                include 'registration.php';
-            }
-
+            include '../models/db_functions.php';
+            $problems = get_x_recent_problems(2);
+            include 'home.php';
     }
 }
 ?>

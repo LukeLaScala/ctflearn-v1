@@ -155,8 +155,8 @@ function get_follow_alerts(){
 
 function require_login() {
     if(!isset($_SESSION['user']['logged_in'])) {
-        $_SESSION['require_login'] = "You need to login! ";
-        header("Location: index.php?action=show_login");
+        $_SESSION['alerts'] = "You need to login! ";
+        header("Location: index.php");
     }
     return;
 }

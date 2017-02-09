@@ -6,37 +6,6 @@
  * Time: 9:46 AM
  */
 
-date_default_timezone_set(date_default_timezone_get());
-
-function time_elapsed_string($datetime, $full = false) {
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
-
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
-
-    $string = array(
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
-    );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
-        }
-    }
-
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
-}
-
 ?>
 <link rel="stylesheet" href="css/animate.css">
 
@@ -82,7 +51,7 @@ $problem = get_problem_from_id($problem_id);
                     <h5><?php echo(strtoupper("by " . htmlspecialchars(get_creator_from_id($problem['problem_id'])['username']))); ?></h5>
                 </a><br>
                 <p class="card-title" style="font-size: 20px; line-height: 1.4;">
-                    <?php echo(htmlspecialchars(get_desc_from_id($problem['problem_id'])['problem_description'])); ?>
+                    <?php echo(get_desc_from_id($problem['problem_id'])['problem_description']); ?>
                 </p>
 
                 <?php if(!solved($problem['problem_id'], $_SESSION['user']['user_id'])){ ?>

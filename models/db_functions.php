@@ -433,6 +433,18 @@ function get_recent_problems($user_id){
     return ($result);
 }
 
+function get_x_recent_problems($num){
+    $sql = "select * from problems p inner join users u on u.user_id = p.user_id order by add_time desc limit :num";
+
+
+    global $dbh;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':num', $num, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return ($result);
+}
+
 function get_score_per_person($user_id){
     global $dbh;
     $stmt = $dbh->prepare("select *, sum(difficulty) score from submissions s inner join problems p on p.problem_id = s.problem_id where s.user_id = :user_id and s.correct = 1");
@@ -1069,4 +1081,50 @@ function get_post_by_id($post_id){
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result;
+}
+
+function add_reply($post_id, $uid, $reply){
+    global $dbh;
+    $stmt = $dbh->prepare("INSERT INTO post_replies (reply, user_id, post_id) VALUES (:reply, :user_id, :post_id)");
+    $stmt->bindParam(':post_id', $post_id);
+    $stmt->bindParam(':user_id', $uid);
+    $stmt->bindParam(':reply', $reply);
+    $stmt->execute();
+}
+
+function get_post_replies($post_id){
+    global $dbh;
+    $stmt = $dbh->prepare("select * from post_replies r inner join users u on u.user_id = r.user_id where post_id = :post_id and reply_parent IS  NULL");
+    $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
+function get_post_subreplies($reply_parent_id){
+    global $dbh;
+    $stmt = $dbh->prepare("select * from post_replies r inner join users u on u.user_id = r.user_id where reply_parent = :reply_parent_id");
+    $stmt->bindParam(':reply_parent_id', $reply_parent_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
+function add_reply_with_parent($post_id, $uid, $reply, $parent_reply){
+    global $dbh;
+    $stmt = $dbh->prepare("INSERT INTO post_replies (reply, user_id, post_id, reply_parent) VALUES (:reply, :user_id, :post_id, :reply_parent)");
+    $stmt->bindParam(':post_id', $post_id);
+    $stmt->bindParam(':user_id', $uid);
+    $stmt->bindParam(':reply', $reply);
+    $stmt->bindParam(':reply_parent', $parent_reply);
+    $stmt->execute();
+}
+
+function get_num_replies($post_id){
+    global $dbh;
+    $stmt = $dbh->prepare("select * from post_replies where post_id = :post_id");
+    $stmt->bindParam(':post_id', $post_id);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return count($result);
 }

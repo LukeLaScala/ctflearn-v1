@@ -5,8 +5,7 @@
 $(document).ready(function(){
     $('.tooltipped').tooltip({delay: 50});
     $(".dropdown-button").dropdown();
-    $('.modal-trigger').leanModal();
-    $('.modal').modal();
+    $('select').material_select();
 
 
     var slider = document.getElementById('difficulty');

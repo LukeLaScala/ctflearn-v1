@@ -392,10 +392,10 @@ function get_activity_phrase($activity){
         case 4:
             return 'replied to a <a class="orange-text" href="index.php?action=view_post&post_id=' . $activity['id'] . '">post</a> ';
         case 5:
-            if($activity['correct']) {
+            if($activity['x']) {
                 return "solved " . htmlspecialchars(get_problem_from_id(get_pid_by_sid($activity['id']))['problem_name']);
             }
-            if(!$activity['correct']) {
+            if(!$activity['x']) {
                 return "failed " . "<a class=\"orange-text\" href=\"index.php?action=find_problem_details&problem_id=" . get_problem_from_id(get_pid_by_sid($activity['id']))['problem_id'] . "\">" . htmlspecialchars(get_problem_from_id(get_pid_by_sid($activity['id']))['problem_name'])  ."</a>";
             }
     }

@@ -1196,11 +1196,14 @@ else {
             break;
 
 
-
         default:
             include '../models/db_functions.php';
             $problems = get_x_recent_problems(2);
-            include 'home.php';
+            if(isset($_SESSION['user'])) {
+                include 'home.php';
+            } else {
+                include 'registration.php';
+            }
     }
 }
 ?>

@@ -1208,9 +1208,7 @@ function delete_reply($rid){
     $stmt = $dbh->prepare("delete from post_replies where reply_parent = :rid");
     $stmt->bindParam(':rid', $rid);
     $stmt->execute();
-
 }
-
 
 function delete_post($pid){
     global $dbh;

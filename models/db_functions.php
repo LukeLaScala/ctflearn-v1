@@ -125,7 +125,7 @@ function get_all_problems($user_id)
     where high.problem_id = s.problem_id
     and high.user_id = :user_id
     and high.submission_id > s.submission_id
-)  and (p.group_id = 0 or p.group_id is null) ";
+)  and (p.group_id = 0 or p.group_id is null)";
 
 
     global $dbh;
@@ -137,7 +137,7 @@ function get_all_problems($user_id)
 }
 
 function get_all_problems_raw(){
-    $sql = "select * from problems p inner join users u on u.user_id = p.user_id";
+    $sql = "select * from problems p inner join users u on u.user_id = p.user_id where (p.group_id = 0 or p.group_id is null)";
     global $dbh;
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);

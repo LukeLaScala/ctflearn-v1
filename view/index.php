@@ -1121,7 +1121,7 @@ else {
             if(!$_SESSION['user']['admin']){
                 header("Location: index.php");
             }
-            if(isset($_POST['post']) && strlen($_POST['post']) <= 400){
+            if(isset($_POST['post']) && strlen($_POST['post']) <= 400 && $_SESSION['user']['admin']){
                 add_post(nl2br($_POST['post']), $_SESSION['user']['user_id'], true);
                 $_SESSION['alerts'] = 'Successfully posted';
             }

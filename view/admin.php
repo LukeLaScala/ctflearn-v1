@@ -18,6 +18,7 @@
         <div class="col l8 push-l2">
             <h3>Add some news!</h3>
             <div class="section"></div>
+            <?php if($_SESSION['user']['admin']) echo 'hi'; ?>
             <form action="index.php?action=add_admin_post" method="post">
 
                 <label for="description">News</label>

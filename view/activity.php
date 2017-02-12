@@ -74,23 +74,5 @@ echo '
 
         </div>
     </div>
-    <div class="row">
-        <div class="center-align">
-            <p class="grey-text grey-lighten-3">Have some costs to offset |: </p>
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- gsfgdd -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-4379021343880694"
-                 data-ad-slot="8106565564"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </div>
-<?php
-
-echo '
 </body>
 </html>
-';

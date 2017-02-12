@@ -14,35 +14,29 @@
     <?php include 'head.php' ?>
 </head>
 <body>
-<?php
-if (isset($_SESSION['user']['logged_in']))
-    include 'navbarloggedin.php';
-else
-    include 'navbar.php';
+<?php navbar(); ?>
 
-?>
 <?php
 echo(get_registration_alerts());
 echo(get_login_alerts());
 ?>
-<script>Materialize.toast('Login above or sign up below', 4000)</script>
-
-<div class="row">
+<div class="row valign-wrapper">
     <div class="col l6">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="col l12 grey-text center-align">
-            <h5>CTFLearn is a new capture the flag practice platform.</h5>
-            <h5>Users can upload their own problems instantly that others can solve for points.</h5>
+        <div class="col l12 grey-text center-align valign hide-on-med-and-down">
+            <h5>CTFLearn is a new capture the flag practice platform for beginner and experts.</h5>
             <br>
-            <br>
-            <br>
+            <h5>Anyone can: </h5>
+            <ul>
+                <li>
+                    Post Problems
+                </li>
+                <li>
+                    Solve Problems
+                </li>
+                <li>
+                    Post News
+                </li>
+            </ul>
         </div>
 
 

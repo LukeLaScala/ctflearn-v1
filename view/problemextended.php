@@ -24,10 +24,15 @@ else
 
 <?php
 echo(get_submit_flag_alerts());
+echo(get_alerts());
 $problem = get_problem_from_id($problem_id);
 ?>
-
-<div class="row animated fadeInUp">
+<style>
+    .padding-top-30 {
+        padding-top: 30px;
+    }
+</style>
+<div class="row">
     <div class="center-align">
         <p class="grey-text grey-lighten-3">Have some costs to offset |: </p>
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -45,7 +50,7 @@ $problem = get_problem_from_id($problem_id);
         <div class="card">
             <div class="card-content">
                 <span class="center-align card-title truncate">
-                    <h3><?php echo(htmlspecialchars(get_problem_from_id($problem['problem_id'])['problem_name'])); ?></h3>
+                    <h5><?php echo(htmlspecialchars(get_problem_from_id($problem['problem_id'])['problem_name'])); ?></h5>
                 </span>
                 <a class="grey-text text-darken-1 center-align card-title truncate" href="index.php?action=show_account&username=<?php echo(get_creator_from_id($problem['problem_id'])['username']); ?>">
                     <h5><?php echo(strtoupper("by " . htmlspecialchars(get_creator_from_id($problem['problem_id'])['username']))); ?></h5>
@@ -78,7 +83,6 @@ $problem = get_problem_from_id($problem_id);
                     </form>
                 <?php } ?>
 
-
                 <h6>&nbsp</h6>
                 <a href="index.php?action=solves&pid=<?php echo($problem['problem_id']); ?>"><?php echo(htmlspecialchars(get_num_solves($problem['problem_id']) . " solves")); ?></a>
 
@@ -86,46 +90,91 @@ $problem = get_problem_from_id($problem_id);
         </div>
     </div>
 
-    <br>
-    <br>
+</div>
 
-    <div class="row">
-        <div class="col l3 push-l1">
-            <h1>Comments</h1>
-        </div>
-        <div class="col l9">
-            <form action="index.php?action=post_comment" method="post">
-                <div class="row">
-                    <div class="input-field col l8 push-l1">
-                        <textarea id="comment" name="comment" class="materialize-textarea" minlength="10" maxlength="500"></textarea>
-                        <label for="comment">Join The Discussion</label>
-                        <input type="hidden" id="pid" name="pid" value="<?php echo($problem['problem_id']); ?>">
+
+<div class="row container padding-top-30">
+    <div class="col l12">
+        <h5 style="display: inline"><?php echo(get_num_comments($problem['problem_id'])); ?> Comments</h5> <a href="#reply" class="modal-trigger right orange-text">Add a comment</a>
+        <div class="divider"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col l10 push-l1">
+        <?php $i = 0; foreach (get_comments($problem['problem_id']) as $comment) { $i += 1 ?>
+            <div class="card white">
+                <div class="card-content black-text">
+                    <div class="row">
+                        <div class="col l10">
+                            <p class="black-text"><?php echo($comment['comment']); ?></p>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col l8 push-l1">
-                        <button type="submit" class="waves-effect waves-light btn blue darken-3">Post</button>
-                    </div>
+                <div class="card-action">
+                    <p><span><a href="#reply<?php echo $i ?>" class="modal-trigger material-reply "><i class="left material-icons">reply</i> Reply</a> <?php echo(get_username_html($comment['username'])); ?></span>
+                        <span class="right"><?php echo(time_elapsed_string($comment['timestamp'])); ?></span>
+                        <?php if(($_SESSION['user']['user_id'] == $comment['user_id']) || $_SESSION['user']['admin']) {?>
+                            <a class="right material-reply" href="index.php?action=delete_comment&cid=<?php echo($comment['cid']); ?>"><i class="material-icons">delete</i></a>
+                        <?php } ?>
+                    </p>
                 </div>
+            </div>
+            <!-- Subreplies -->
+
+            <div class="row">
+                <div class="col l10 push-l2">
+                    <?php foreach (get_comment_subreplies($comment['cid']) as $subcomment) { ?>
+                        <div class="card white">
+                            <div class="card-content black-text">
+                                <div class="row">
+                                    <div class="col l10">
+                                        <p class="black-text"><?php echo($subcomment['comment']); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <p><span><?php echo(get_username_html($subcomment['username'])); ?></span><span class="right"><?php echo(time_elapsed_string($subcomment['timestamp'])); ?>
+
+                                        <?php if(($_SESSION['user']['user_id'] == $subcomment['user_id']) || $_SESSION['user']['admin']) {?>
+                                            <a class="right material-reply" href="index.php?action=delete_comment&cid=<?php echo($subcomment['cid']); ?>"><i class="material-icons">delete</i></a>
+                                        <?php } ?>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+
+        <?php } ?>
+    </div>
+</div>
+
+<div id="reply" class="modal">
+    <div class="modal-content">
+        <h4>Comment</h4>
+        <form action="index.php?action=add_comment" method="post">
+            <textarea id="comment" name="comment" class="materialize-textarea" maxlength="400" required></textarea>
+            <input type="hidden" name="pid" value="<?php echo($problem['problem_id']); ?>">
+            <button type="submit" class="waves-effect waves-light btn blue">Add Comment</button>
+        </form>
+    </div>
+</div>
+
+<?php $ii = 0; foreach (get_comments($problem['problem_id']) as $comment) { $ii += 1 ?>
+    <div id="reply<?php echo($ii); ?>" class="modal">
+        <div class="modal-content">
+            <h4>Reply to comment</h4>
+            <form action="index.php?action=add_comment" method="post">
+                <textarea id="comment" name="comment" class="materialize-textarea" maxlength="400" required></textarea>
+                <input type="hidden" name="pid" value="<?php echo($problem['problem_id']); ?>">
+                <input type="hidden" name="comment_parent" value="<?php echo($comment['cid']); ?>">
+                <button type="submit" class="waves-effect waves-light btn blue">Add Comment</button>
             </form>
         </div>
     </div>
+<?php } ?>
 
-
-    <div class="row" style="padding-bottom: 10%;">
-        <div class="col l10 push-l1">
-            <ul class="collection">
-            <?php  foreach (get_comments($problem['problem_id']) as $comment) { ?>
-                <li class="collection-item">
-                    <p><span>
-                        <?php echo(htmlspecialchars($comment['comment'])); ?>
-                    </span>
-                    <span class="right"><?php echo("posted " . time_elapsed_string($comment['timestamp']));?> by <a href="index.php?action=show_account&username=<?php echo(htmlspecialchars($comment['username']));?>"><?php echo(htmlspecialchars($comment['username']));?></a><?php if($comment['user_id'] == $_SESSION['user']['user_id']) { ?><a href="index.php?action=delete_comment&cid=<?php echo($comment['cid']); ?>"><i class="right black-text material-icons">delete</i></a> <?php } ?>
- </span></p>
-                </li>
-            <?php } ?>
-            </ul>
-        </div>
-    </div>
 </body>
 </html>

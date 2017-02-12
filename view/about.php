@@ -14,13 +14,7 @@
     <?php include 'head.php' ?>
 </head>
 <body bgcolor="#1565C0">
-<?php
-if (isset($_SESSION['user']['logged_in']))
-    include 'navbarloggedin.php';
-else
-    include 'navbar.php';
-
-?>
+<?php navbar(); ?>
 
 <style>
     .padding-bottom {

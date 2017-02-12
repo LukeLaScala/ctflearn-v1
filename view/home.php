@@ -28,20 +28,20 @@
         </style>
     </head>
     <body>
-        <?php include 'navbarloggedin.php' ?>
+        <?php navbar(); ?>
         <?php echo(get_alerts()); ?>
 
         <div class="contain">
             <div class="row padding-top-30">
                 <div class="col l7">
-                    <a class="orange-text" href="index.php?action=show_unsolved_problems">Unsolved Problems</a>
+                    <a class="orange-text" href="index.php?action=show_unsolved_problems">View All Unsolved Problems</a>
                 </div>
             </div>
             <div class="row">
                <div class="col l7">
                    <div class="card white">
                        <div class="card-content blue-text" id="main-problem">
-                          <p><span class="card-title more-padding-bottom"><?php echo($problems[0]['problem_name']); ?></span><span class="right"><?php echo(get_username_html($problems[0]['username'])); ?></span></p>
+                          <p><span class="card-title more-padding-bottom"><?php echo(htmlspecialchars($problems[0]['problem_name'])); ?></span><span class="right"><?php echo(get_username_html($problems[0]['username'])); ?></span></p>
                            <h6 class="blue-text"><?php echo(htmlspecialchars($problems[0]['category'])); ?></h6>
                            <div class="card-action">
                                <p class="wrap-word padding-top-30"><?php echo($problems[0]['problem_description']); ?></p>
@@ -55,7 +55,7 @@
                <div class="col l5">
                    <div class="card white">
                        <div class="card-content blue-text" id="main-problem">
-                           <p><span class="card-title more-padding-bottom"><?php echo($problems[2]['problem_name']); ?></span><span class="right"><?php echo(get_username_html($problems[1]['username'])); ?></span></p>
+                           <p><span class="card-title more-padding-bottom"><?php echo(htmlspecialchars($problems[1]['problem_name'])); ?></span><span class="right"><?php echo(get_username_html($problems[1]['username'])); ?></span></p>
                            <h6 class="blue-text"><?php echo(htmlspecialchars($problems[1]['category'])); ?></h6>
                            <div class="card-action">
                                <p class="wrap-word padding-top-30"><?php echo($problems[1]['problem_description']); ?></p>
@@ -69,11 +69,11 @@
            </div>
 
             <div class="section"></div>
-            <div class="divider"></div>
             <div class="section"></div>
             <div class="section"></div>
-
-
+            <div class="section"></div>
+            <div class="section"></div>
+            <div class="section"></div>
 
             <div class="row">
                 <div class="col l6">
@@ -137,6 +137,12 @@
                 </form>
             </div>
         </div>
+        <br>
+    <br><br>
+        <br><br>
+        <br><br>
+        <br><br>
+        <br>
     </body>
 </html>
 

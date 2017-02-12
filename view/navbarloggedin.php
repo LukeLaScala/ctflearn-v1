@@ -9,7 +9,7 @@
 
 <div class="navbar-fixed">
     <nav>
-        <div class="nav-wrapper blue darken-3 row">
+        <div class="nav-wrapper blue row">
             <div class="col l1">
                 <a href="index.php" class="brand-logo">&nbsp; &nbsp; CTFLearn</a>
             </div>
@@ -37,17 +37,16 @@
     </nav>
 </div>
 
-<ul id="account" class="dropdown-content blue darken-3 white-text">
-    <li><a href="index.php?action=global_activity" class="white-text">Activity</a></li>
+<ul id="account" class="dropdown-content blue white-text">
     <li><a href="index.php?action=show_account&username=<?php echo($_SESSION['user']['username']); ?>" class="white-text">Account</a></li>
     <li><a href="index.php?action=logout" class="white-text">Logout</a></li>
 </ul>
-<ul id="addproblem" class="dropdown-content blue darken-3 white-text">
+<ul id="addproblem" class="dropdown-content blue white-text">
     <li><a href="index.php?action=show_add_challenge" class="white-text">Create Problem</a></li>
     <li><a href="index.php?action=show_unsolved_problems" class="white-text">Unsolved Problems</a></li>
     <li><a href="index.php?action=show_all_problems" class="white-text">All Problems</a></li>
 </ul>
-<ul id="search" class="dropdown-content blue darken-3 white-text">
+<ul id="search" class="dropdown-content blue white-text">
     <li><a href="index.php?action=show_problem_lookup" class="white-text">Problems</a></li>
     <li><a href="index.php?action=show_account_lookup" class="white-text">Users</a></li>
 </ul>

@@ -11,9 +11,7 @@
     <?php include 'head.php'?>
 </head>
 <body>
-<?php include 'navbarloggedin.php'; ?>
-<link rel="stylesheet" href="css/animate.css">
-
+<?php navbar(); ?>
 <style type="text/css">
     ::-webkit-scrollbar {
         display: none;
@@ -27,7 +25,7 @@
             <tr>
                 <th data-field="price">Rank</th>
                 <th data-field="id">Username</th>
-                <th data-field="price">Points</th>
+                <th data-field="price">Percent Completed</th>
 
             </tr>
             </thead>
@@ -41,7 +39,7 @@
                         <?php if($scores_reversed[$i] == 0){
                             echo(0);
                         } else {
-                            echo(htmlspecialchars($scores_reversed[$i]));
+                            echo(htmlspecialchars($scores_reversed[$i]) . "%");
                         } ?>
                     </td>
                 </tr>

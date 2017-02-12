@@ -43,8 +43,6 @@ echo(get_registration_alerts());
             </form>
             <a href="index.php?action=show_add_user"><button class="waves-effect waves-light btn orange">Register</button></a>
         </div>
-        <br>
-        <div class="col l8 push-l2 blue-text">CTFLearn is updated daily. Last update: Activity Pages, UIs Enhancement, Updated Score Calculations</div>
     </div>
 </div>
 </body>

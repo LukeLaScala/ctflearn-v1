@@ -39,7 +39,7 @@ function time_elapsed_string($datetime, $full = false) {
 }
 
 function get_username_html($username){
-    return '<a href="index.php?action=show_account&username=' . $username . '">' . $username . '</a>';
+    return '<a class="orange-text" href="index.php?action=show_account&username=' . $username . '">' . $username . '</a>';
 }
 
 function get_registration_alerts(){
@@ -52,6 +52,14 @@ function get_registration_alerts(){
 
     else
         return "";
+}
+
+function navbar(){
+    if(isset($_SESSION['user'])){
+        include 'navbarloggedin.php';
+    } else {
+        include 'navbar.php';
+    }
 }
 
 function is_leader_of_group($user_id, $group_id){
@@ -365,4 +373,30 @@ function owns_problem($pid){
 
 function get_exp($user_id){
     return get_num_problems_contributed($user_id) + get_all_attempts_num($user_id) + get_all_solves_num($user_id);
+}
+
+function get_activity_phrase($activity){
+    //1 -> Added problem
+    //2 -> Commented
+    //3 -> Post
+    //4 -> Post Reply
+    //5 -> Submission
+
+    switch ($activity['type']) {
+        case 1:
+            return "added " . "<a class=\"orange-text\" href=\"index.php?action=find_problem_details&problem_id=" . $activity['id'] . "\">" . htmlspecialchars(get_problem_from_id($activity['id'])['problem_name']) . "</a>";
+        case 2:
+            return "commented on " . "<a class=\"orange-text\" href=\"index.php?action=find_problem_details&problem_id=" . get_problem_from_id(get_pid_by_cid($activity['id']))['problem_id'] . "\">" . htmlspecialchars(get_problem_from_id(get_pid_by_cid($activity['id']))['problem_name']) . "</a>";
+        case 3:
+            return 'posted <a class="orange-text" href="index.php?action=view_post&post_id=' . $activity['id'] . '">something interesting</a>';
+        case 4:
+            return 'replied to a <a class="orange-text" href="index.php?action=view_post&post_id=' . $activity['id'] . '">post</a> ';
+        case 5:
+            if($activity['correct']) {
+                return "solved " . htmlspecialchars(get_problem_from_id(get_pid_by_sid($activity['id']))['problem_name']);
+            }
+            if(!$activity['correct']) {
+                return "failed " . "<a class=\"orange-text\" href=\"index.php?action=find_problem_details&problem_id=" . get_problem_from_id(get_pid_by_sid($activity['id']))['problem_id'] . "\">" . htmlspecialchars(get_problem_from_id(get_pid_by_sid($activity['id']))['problem_name'])  ."</a>";
+            }
+    }
 }

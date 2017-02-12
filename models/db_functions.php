@@ -131,11 +131,21 @@ function get_all_problems($user_id)
     global $dbh;
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
-
     $stmt->execute();
     $result = $stmt->fetchAll();
     return $result;
 }
+
+function get_all_problems_raw(){
+    $sql = "select * from problems p inner join users u on u.user_id = p.user_id";
+    global $dbh;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
 
 function get_all_problems_per_group($user_id, $sort, $group_id)
 {
@@ -1010,6 +1020,10 @@ function delete_comment($cid){
     $stmt = $dbh->prepare("delete from comments where cid = :cid");
     $stmt->bindParam(':cid', $cid);
     $stmt->execute();
+    global $dbh;
+    $stmt = $dbh->prepare("delete from comments where parent_comment_id = :cid");
+    $stmt->bindParam(':cid', $cid);
+    $stmt->execute();
 }
 
 function get_problem_id_by_comment($cid){
@@ -1023,8 +1037,8 @@ function get_problem_id_by_comment($cid){
 
 function get_comments($pid){
     global $dbh;
-    $stmt = $dbh->prepare("select * from comments c inner join users u on c.uid = u.user_id where c.pid = :pid");
-    $stmt->bindParam(':pid', $pid);
+    $stmt = $dbh->prepare("select * from comments c inner join users u on c.uid = u.user_id where c.pid = :pid and parent_comment_id IS NULL");
+    $stmt->bindParam(':pid', $pid, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll();
     return $result;
@@ -1120,6 +1134,16 @@ function add_reply_with_parent($post_id, $uid, $reply, $parent_reply){
     $stmt->execute();
 }
 
+function add_comment_with_parent($uid, $pid, $comment, $parent_id){
+    global $dbh;
+    $stmt = $dbh->prepare("INSERT INTO comments (uid, pid, comment, parent_comment_id) VALUES (:uid, :pid, :comment, :parent_id)");
+    $stmt->bindParam('uid', $uid);
+    $stmt->bindParam(':pid', $pid);
+    $stmt->bindParam(':comment', $comment);
+    $stmt->bindParam(':parent_id', $parent_id);
+    $stmt->execute();
+}
+
 function get_num_replies($post_id){
     global $dbh;
     $stmt = $dbh->prepare("select * from post_replies where post_id = :post_id");
@@ -1127,4 +1151,88 @@ function get_num_replies($post_id){
     $stmt->execute();
     $result = $stmt->fetchAll();
     return count($result);
+}
+
+
+function get_num_comments($pid){
+    global $dbh;
+    $stmt = $dbh->prepare("select * from comments where pid = :pid");
+    $stmt->bindParam(':pid', $pid);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return count($result);
+}
+
+function get_comment_subreplies($parent_comment_id){
+    global $dbh;
+    $stmt = $dbh->prepare("select * from comments r inner join users u on u.user_id = r.uid where parent_comment_id = :parent_comment_id");
+    $stmt->bindParam(':parent_comment_id', $parent_comment_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+}
+
+function get_recent_activity(){
+    $sql  = 'select * from (select problem_name as x, add_time as timestamp, user_id, 1 as type, problem_id as id from problems union select comment, timestamp, uid ,2, cid from comments union select post, timestamp, user_id, 3, post_id from posts union select reply, timestamp, user_id, 4, post_id from post_replies union select correct, submission_time, user_id, 5, submission_id from submissions) t1 inner join users u on t1.user_id = u.user_id ORDER by timestamp desc limit 20';
+    global $dbh;
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
+
+}
+
+function get_pid_by_cid($cid){
+    global $dbh;
+    $stmt = $dbh->prepare("select pid from comments where cid = :cid");
+    $stmt->bindParam(':cid', $cid, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['pid'];
+}
+
+function get_pid_by_sid($sid){
+    global $dbh;
+    $stmt = $dbh->prepare("select problem_id from submissions where submission_id = :sid");
+    $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['problem_id'];
+}
+
+function delete_reply($rid){
+    global $dbh;
+    $stmt = $dbh->prepare("delete from post_replies where reply_id = :rid");
+    $stmt->bindParam(':rid', $rid);
+    $stmt->execute();
+    $stmt = $dbh->prepare("delete from post_replies where reply_parent = :rid");
+    $stmt->bindParam(':rid', $rid);
+    $stmt->execute();
+
+}
+
+
+function delete_post($pid){
+    global $dbh;
+    $stmt = $dbh->prepare("delete from posts where post_id = :pid");
+    $stmt->bindParam(':pid', $pid);
+    $stmt->execute();
+}
+
+function get_reply_owner($rid){
+    global $dbh;
+    $stmt = $dbh->prepare("select p.user_id,reply_id from post_replies p inner join users u on u.user_id = p.user_id where reply_id = :rid");
+    $stmt->bindParam(':rid', $rid, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['user_id'];
+}
+
+function get_post_owner($pid){
+    global $dbh;
+    $stmt = $dbh->prepare("select p.user_id,post_id from posts p inner join users u on u.user_id = p.user_id where post_id = :pid");
+    $stmt->bindParam(':pid', $pid, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['user_id'];
 }

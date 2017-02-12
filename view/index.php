@@ -94,11 +94,11 @@ else {
             setcookie("has_account", 1, time() + 86400 * 30);
 
             if (isset($_SESSION['user']['logged_in'])) {
-                $_SESSION['login'] = "Successfully logged in!";
+                $_SESSION['alerts'] = "Successfully logged in!";
                 header("Location: index.php");
             } else {
-                $_SESSION['login'] = "Your email or password is incorrect. ";
-                header("Location: index.php");
+                $_SESSION['alerts'] = "Your email or password is incorrect. ";
+                header("Location: index.php?action=show_login");
             }
 
             break;
@@ -166,7 +166,7 @@ else {
                 if ($_SESSION['user']['user_id'] != $user_id) {
                     header("Location: WTF");
                 }
-                add_problem(htmlspecialchars($name), nl2br(htmlspecialchars($desc)), $user_id, $flag, $difficulty, htmlspecialchars($category));
+                add_problem($name, nl2br(htmlspecialchars($desc)), $user_id, $flag, $difficulty, $category);
                 $_SESSION['add_challenge'] = "Problem added successfully!";
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
             }
@@ -431,14 +431,13 @@ else {
             break;
 
 
-        case "post_comment":
+        case "add_comment":
             require_login();
             include "../models/db_functions.php";
 
             $uid = "";
             $pid = "";
             $comment = "";
-
 
 
             if(isset($_POST['pid'])){
@@ -463,7 +462,13 @@ else {
             }
 
             if($uid != "" && $pid != "" && $comment != ""){
-                add_comment($uid, $pid, $comment);
+
+                if(isset($_POST['comment_parent'])){
+                    add_comment_with_parent($uid, $pid, nl2br(htmlspecialchars($comment)),$_POST['comment_parent']);
+                }
+                else {
+                    add_comment($uid, $pid, nl2br(htmlspecialchars($comment)));
+                }
             }
 
             header("Location: index.php?action=find_problem_details&problem_id=" . $_POST['pid']);
@@ -475,7 +480,7 @@ else {
             include "../models/db_functions.php";
             $pid = "";
             if (isset($_GET['cid'])) {
-                if(get_comment_owner($_GET['cid']) == $_SESSION['user']['user_id']){
+                if((get_comment_owner($_GET['cid']) == $_SESSION['user']['user_id']) || $_SESSION['user']['admin']){
                     $pid = get_problem_id_by_comment($_GET['cid']);
                     delete_comment($_GET['cid']);
                 }
@@ -491,7 +496,6 @@ else {
             break;
 
         case "show_account":
-            require_login();
             include "../models/db_functions.php";
             if (isset($_GET['username'])) {
                 $username = $_GET['username'];
@@ -536,13 +540,9 @@ else {
 
             break;
         case "show_all_problems":
-            require_login();
             include "../models/db_functions.php";
 
-            $user_id = $_SESSION['user']['user_id'];
-
-
-            $problem_list = get_all_problems($user_id);
+            $problem_list = get_all_problems_raw();
 
             include 'show_all_problems.php';
             break;
@@ -1019,8 +1019,8 @@ else {
             foreach ($members as $member) {
                 $score = get_score_per_person($member['user_id'])['score'];
                 $score = $score / get_total_points_available_per_person($member['user_id'])['score'];
-                $score *= 1000;
-                $score = round($score, 0);
+                $score *= 100;
+                $score = round($score, 2);
                 $name = $member['username'];
                 $scores[$counter] = $score;
                 $names[$counter] = $name;
@@ -1054,7 +1054,6 @@ else {
             break;
 
         case "activity":
-            require_login();
             include '../models/db_functions.php';
             $recent_problems = get_followings_problems($_SESSION['user']['user_id']);
             $recent_submissions = get_followings_submissions($_SESSION['user']['user_id']);
@@ -1069,7 +1068,9 @@ else {
 
             include('globalactivity.php');
             break;
-
+        case "show_login":
+            include 'login.php';
+            break;
         case "solves":
             include '../models/db_functions.php';
             if (isset($_GET['pid']))
@@ -1171,6 +1172,30 @@ else {
             }
 
             break;
+        case "delete_reply":
+            require_login();
+            include '../models/db_functions.php';
+            if((isset($_GET['rid']) && ($_SESSION['user']['user_id'] == get_reply_owner($_GET['rid']))) || $_SESSION['user']['admin']){
+                delete_reply($_GET['rid']);
+                $_SESSION['alerts'] = "Success!";
+            }
+
+            header('Location: index.php?action=view_post&post_id=' . $_SESSION['return_post_id']);
+
+            break;
+        case "delete_post":
+            require_login();
+            include '../models/db_functions.php';
+            if((isset($_GET['post_id']) && ($_SESSION['user']['user_id'] == get_post_owner($_GET['post_id']))) || $_SESSION['user']['admin']){
+                delete_post($_GET['post_id']);
+                $_SESSION['alerts'] = "Success!";
+            }
+
+            header('Location: index.php');
+
+            break;
+
+
 
         default:
             include '../models/db_functions.php';

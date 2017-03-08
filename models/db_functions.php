@@ -117,8 +117,6 @@ function log_in($username, $password)
 
 function get_all_problems($user_id)
 {
-
-
     $sql = "select *, p.problem_id as pid from problems p left join submissions s on s.problem_id = p.problem_id and s.user_id = :user_id inner join users u on u.user_id = p.user_id where not exists (
     select *
     from submissions high
@@ -1233,4 +1231,22 @@ function get_post_owner($pid){
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['user_id'];
+}
+
+function is_recent_news_admin(){
+
+    global $dbh;
+    $stmt = $dbh->prepare("SELECT * FROM posts WHERE timestamp > DATE(NOW() - INTERVAL 1 DAY) and is_admin_post = 1");
+    $stmt->execute();
+    return $stmt->fetchAll();
+
+}
+
+function is_recent_news_nonadmin(){
+
+    global $dbh;
+    $stmt = $dbh->prepare("SELECT * FROM posts WHERE timestamp > DATE(NOW() - INTERVAL 1 DAY) and is_admin_post = 0");
+    $stmt->execute();
+    return $stmt->fetchAll();
+
 }

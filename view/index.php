@@ -28,6 +28,7 @@ else {
     switch ($action) {
         case "show_add_user":
             //18 chars max
+            include '../models/db_functions.php';
             include '../view/registration.php';
             break;
 
@@ -591,11 +592,14 @@ else {
 
         case "show_account_lookup":
             require_login();
+            include '../models/db_functions.php';
             include 'show_account_lookup.php';
             break;
 
         case "show_problem_lookup":
             require_login();
+            include '../models/db_functions.php';
+
             include 'show_problem_lookup.php';
             break;
 
@@ -898,7 +902,7 @@ else {
             $user_id = $_SESSION['user']['user_id'];
             $problem_id = $_GET['problem_id'];
 
-            if ($_SESSION['user']['admin'] or is_leader_of_group($_SESSION['user']['user_id'], get_problem_from_id($problem_id)['group_id']) or owns_problem($problem_id))
+            if ($_SESSION['user']['admin'] or owns_problem($problem_id))
                 delete_problem($problem_id);
 
             header("Location: index.php?action=show_account&username=" . $_SESSION['user']['username']);
@@ -1069,6 +1073,7 @@ else {
             include('globalactivity.php');
             break;
         case "show_login":
+            include '../models/db_functions.php';
             include 'login.php';
             break;
         case "solves":
@@ -1172,6 +1177,24 @@ else {
             }
 
             break;
+
+        case "view_all_news":
+            include '../models/db_functions.php';
+            if(isset($_GET['type'])){
+
+                if($_GET['type'] == 'other'){
+                    $posts = get_posts(PHP_INT_MAX);
+                }
+
+                else {
+                    $posts = get_admin_posts(PHP_INT_MAX);
+                }
+
+                include 'allnews.php';
+            }
+
+            break;
+
         case "delete_reply":
             require_login();
             include '../models/db_functions.php';
@@ -1202,7 +1225,7 @@ else {
             if(isset($_SESSION['user'])) {
                 include 'home.php';
             } else {
-                include 'registration.php';
+                include 'login.php';
             }
     }
 }

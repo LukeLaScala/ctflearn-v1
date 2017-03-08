@@ -15,12 +15,7 @@
 </head>
 <body>
 <?php
-if(isset($_SESSION['user']['logged_in']))
-    include 'navbarloggedin.php';
-else
-    include 'navbar.php';
-
-
+    navbar();
 ?>
 
 

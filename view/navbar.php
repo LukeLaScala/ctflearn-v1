@@ -12,6 +12,7 @@
         <div class="nav-wrapper blue">
             <a href="index.php" style="padding-left: 10px;" class="brand-logo">CTFLearn</a>
             <ul class="right hide-on-small-only">
+                <li><a class="dropdown-button <?php if(is_recent_news_admin() || is_recent_news_nonadmin()) {echo ("yellow-text");} ?>" data-hover="true" data-beloworigin="true" data-activates="posts"><i class="material-icons left">announcement</i>News</a>
                 <li><a href="index.php?action=show_add_user">Register</a></li>
                 <li><a href="index.php?action=show_login">Login</a></li>
                 <li><a class="dropdown-button" data-hover="true" data-beloworigin="true" data-activates="problems-dropdown">Problems</a></li>
@@ -21,6 +22,12 @@
         </div>
     </nav>
 </div>
+
+
+<ul id="posts" class="dropdown-content blue white-text">
+    <li><a class="<?php if(is_recent_news_admin()) {echo('yellow-text');} else {echo('white-text');} ?>" href="index.php?action=view_all_news&type=ctflearn">News from us</a>
+    <li><a class="<?php if(is_recent_news_nonadmin()) {echo('yellow-text');} else {echo('white-text');} ?>" href="index.php?action=view_all_news&type=other">Other news</a>
+</ul>
 
 <ul id="problems-dropdown" class="dropdown-content blue white-text">
     <li><a href="index.php?action=show_add_challenge" class="white-text">Create Problem</a></li>

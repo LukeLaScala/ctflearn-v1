@@ -17,8 +17,8 @@
 
 <div class="row">
     <div class="col l8 push-l2">
-        <h4 class="orange-text center-align">All Problems
-        </h4>
+        <h4 class="orange-text center-align">All Problems</h4>
+
         <ul class="collapsible" data-collapsible="accordion">
             <?php foreach ($problem_list as $problem) { ?>
                 <li onclick="window.parent.location.href='index.php?action=find_problem_details&problem_id=<?php echo($problem['problem_id']); ?>'">

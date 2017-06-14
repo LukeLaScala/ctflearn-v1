@@ -28,8 +28,14 @@
     </style>
 </head>
 <body>
-<?php include 'navbarloggedin.php' ?>
-<?php echo(get_alerts()); ?>
+
+<?php 
+if (isset($_SESSION['user']['logged_in']))
+    include 'navbarloggedin.php';
+else
+    include 'navbar.php';
+echo(get_alerts()); 
+    ?>
 
 <div class="contain padding-top-30">
     <div class="row">

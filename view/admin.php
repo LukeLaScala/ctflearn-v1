@@ -5,12 +5,21 @@
  * Date: 2/5/17
  * Time: 7:07 PM
  */
-
+if(!isset($_SESSION['user']['admin']))
+{
+  header('Location: https://ctflearn.com/index.php', true, 302);
+  die();
+}
+if(!$_SESSION['user']['admin'])
+{
+  header('Location: https://ctflearn.com/index.php', true, 302);
+  die();
+}
 ?>
 
 <html>
 <head>
-    <?php include 'head.php'?>
+    <?php include 'head.php' ?>
 </head>
 <body>
 <div class="container section">

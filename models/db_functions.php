@@ -53,9 +53,8 @@ function add_group_problem($name, $desc, $user_id, $flag, $difficulty, $category
 function edit_problem($desc, $user_id, $flag, $difficulty, $category, $pid)
 {
     global $dbh;
-    $stmt = $dbh->prepare("update problems set problem_description=:desc, user_id=:user_id, flag=:flag, difficulty=:difficulty, category=:category where problem_id = :pid");
+    $stmt = $dbh->prepare("update problems set problem_description=:desc, flag=:flag, difficulty=:difficulty, category=:category where problem_id = :pid");
     $stmt->bindParam(':desc', $desc);
-    $stmt->bindParam(':user_id', $user_id);
     $stmt->bindParam(':flag', $flag);
     $stmt->bindParam(':difficulty', $difficulty);
     $stmt->bindParam(':category', $category);

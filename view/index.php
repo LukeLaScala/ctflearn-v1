@@ -913,7 +913,7 @@ else {
             include "../models/db_functions.php";
             $user_id = $_SESSION['user']['user_id'];
             $problem_id = $_GET['problem_id'];
-            if (!owns_problem($problem_id)) {
+            if (!owns_problem($problem_id) && !($_SESSION['user']['admin'])) {
                 header("Location: index.php");
             }
             $problem = get_problem_from_id($problem_id);
@@ -965,7 +965,7 @@ else {
                 $_SESSION['edit_challenge'] = "Stop hacking the site!";
 
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
-            } else if (!owns_problem($pid)) {
+            } else if (!owns_problem($pid) && !($_SESSION['user']['admin'])) {
                 $_SESSION['edit_challenge'] = "Stop hacking the site!";
 
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);

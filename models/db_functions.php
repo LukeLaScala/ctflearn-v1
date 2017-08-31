@@ -223,7 +223,7 @@ function get_unsolved_problems($user_id, $sort)
             $sql .= "and p.category = \"Cryptography\"";
             break;
         case "programming":
-            $sql .= "and p.category = \"Programming\")";
+            $sql .= "and p.category = \"Programming\"";
             break;
     }
 

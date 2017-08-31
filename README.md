@@ -1,0 +1,1 @@
+To get a local version just clone this repo, create a database called `ctflearn` and a user called `ctflearn` with the password `ctflearn`. Then navigate to `/ctflearn/view/index.php` and there should be a fresh version of CTFLearn with no data.

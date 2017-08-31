@@ -30,13 +30,13 @@
 
                 <li>
                     <div class="collapsible-header" style="cursor: default">
-                        <?php echo("<u><a class=\"orange-text\" href=index.php?action=lookup_problem&problem_name=" . str_replace(" ", "%20",$problem['problem_name']) . ">" . $problem['problem_name'] . "</a></u>" . htmlspecialchars(" - " . $problem['username'] . " - " . $problem['difficulty'] . "pts")) ?>
+                        <?php echo("<u><a class=\"orange-text\" href='index.php?action=lookup_problem&problem_name=" . str_replace(" ", "%20",$problem['problem_name']) . "'>" . htmlspecialchars($problem['problem_name']) . "</a></u>" . htmlspecialchars(" - " . $problem['username'] . " - " . $problem['difficulty'] . "pts")) ?>
                         <span style="float: right"><?php echo(htmlspecialchars($problem['category'] . "  " . get_num_solves($problem['problem_id'])) . "  " . "solves"); ?>
                         </span>
                     </div>
                     <div class="collapsible-body">
                         <p>
-                            <?php echo(htmlspecialchars($problem['problem_description'])); ?>
+                            <?php echo($problem['problem_description']); ?>
                         </p>
                         <div class="section"></div>
 

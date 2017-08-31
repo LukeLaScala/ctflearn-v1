@@ -13,7 +13,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(1);
 
-if($_SERVER['HTTP_HOST'] != "ctflearn.com" and $_SERVER['HTTP_HOST'] != 'www.ctflearn.com' and $_SERVER['HTTP_HOST'] != '45.55.74.193' and $_SERVER['HTTP_HOST'] != 'localhost'){
+if($_SERVER['HTTP_HOST'] != "ctflearn.com" and $_SERVER['HTTP_HOST'] != 'www.ctflearn.com' and $_SERVER['HTTP_HOST'] != '45.55.74.193' and $_SERVER['HTTP_HOST'] != 'localhost:8888'){
     echo("Please dont frame my site (;");
     echo($_SERVER['HTTP_HOST']);
 }
@@ -970,7 +970,7 @@ else {
 
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
             } else {
-                edit_problem($desc, $user_id, $flag, $difficulty, $category, $pid);
+                edit_problem(htmlspecialchars(nl2br($desc)), $user_id, $flag, $difficulty, $category, $pid);
                 $_SESSION['edit_challenge'] = "Problem edited successfully!";
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
             }

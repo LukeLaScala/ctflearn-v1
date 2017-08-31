@@ -970,7 +970,7 @@ else {
 
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
             } else {
-                edit_problem($desc, $user_id, $flag, $difficulty, $category, $pid);
+                edit_problem(htmlspecialchars(nl2br($desc)), $user_id, $flag, $difficulty, $category, $pid);
                 $_SESSION['edit_challenge'] = "Problem edited successfully!";
                 header('Location: index.php?action=show_account&username=' . $_SESSION['user']['username']);
             }

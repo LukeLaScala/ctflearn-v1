@@ -367,7 +367,12 @@ function solved($problem_id, $user_id){
 }
 
 function owns_problem($pid){
-    return get_creator_from_id($pid)['user_id'] == $_SESSION['user']['user_id'];
+    $owns = get_creator_from_id($pid)['user_id'] == $_SESSION['user']['user_id'];
+    if(!$owns) {
+      die();
+    } else {
+      return $owns;
+    }
 
 }
 
